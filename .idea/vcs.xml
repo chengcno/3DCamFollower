@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/ext/libigl" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ext/libigl/external/CoMISo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ext/libigl/external/cgal" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ext/libigl/external/eigen" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ext/libigl/external/glad" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ext/libigl/external/glfw" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ext/libigl/external/imgui" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ext/libigl/external/imguizmo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ext/libigl/external/libigl-imgui" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ext/libigl/external/predicates" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ext/libigl/external/stb" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ext/libigl/external/tetgen" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ext/libigl/external/tinyxml2" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ext/libigl/external/triangle" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ext/libigl/tutorial/data" vcs="Git" />
+  </component>
+</project>
