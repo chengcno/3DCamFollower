@@ -75,7 +75,7 @@ The control panel is shown below. There are 3 components in the control panel:
   Control the object visualization state.
 
 ## Create a Cam-Follower Mechanism <a name = "create_mech"></a>
-These instructions give an example to you of how to use our code to generate a cam-linkage mechanism by yourself.
+These instructions give an example to you of how to use our code to generate a cam-follower mechanism by yourself.
 
 ### Step 1: import an input curve
 Import any input curve file by clicking `Read Input Curve` button.
@@ -91,7 +91,7 @@ Use `Restart Motion`,`Stop Motion`,`Motion Speed` to control the movement. Use m
 
 ### Step 4: Show results demo
 Import one results demo from file `data/resultsData/ * /mats.txt` by clicking `Read CamFollower` button.
-Here is a view of Drawing cats.
+Here is a view of drawing cats.
 ![](https://github.com/chengcno/SpatialLinkageCam/blob/main/doc/motion.png)
 
 
