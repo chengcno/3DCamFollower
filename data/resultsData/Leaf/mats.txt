@@ -1,0 +1,18 @@
+###################################################
+# Part model
+
+Model 6
+Model/mech_1_part_00.obj
+Model/mech_1_part_01.obj
+Model/mech_1_part_00_s0.obj
+Model/mech_1_part_00_s1.obj
+Model/mech_1_part_01_s0.obj
+Model/targetcurve.obj
+
+###################################################
+# Part motion
+
+Matrix 2
+Frame 120
+Motion/mech_1_part_00.pmt
+Motion/mech_1_part_01.pmt

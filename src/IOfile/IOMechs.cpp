@@ -17,7 +17,6 @@ IOMechs::IOMechs()
 }
 
 IOMechs::~IOMechs() {
-
 }
 
 void IOMechs::ReadInputCurve(string curveName)
@@ -169,9 +168,6 @@ void IOMechs::UpdateMotion(iglViewer &viewer, double frame)
             aftM = motionMats[sizeMesh - i - 1][aftId];
             Matrix4d tM = InterpolationMat4d(preM, aftM, frame - int(floor(frame)));
 
-            //cout<< " motion Matrix " << i << endl;
-            //cout << tM <<endl;
-
             meshList[sizeMesh - i - 1]->TransformMesh(tM, verM);
             viewer.data_list[viewer.data_list.size() - 1 - i].set_vertices(verM);
             viewer.data_list[viewer.data_list.size() - 1 - i].compute_normals();
@@ -208,7 +204,6 @@ void IOMechs::ReadMotion()
         fstream matin;
         vector<Matrix4d> mats;
         matin.open(ms, ios::in);
-        //cout<< "read from " << ms <<endl;
         for(int i=0;i<motionFrames;i++)
         {
             Matrix4d mat;
@@ -221,8 +216,6 @@ void IOMechs::ReadMotion()
                 mat(k, 3) *= scaleL;
 
             mats.push_back(mat);
-            //cout << "read motion " << endl;
-            //cout<< mat <<endl;
         }
         motionMats.push_back(mats);
     }

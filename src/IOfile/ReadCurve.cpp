@@ -14,12 +14,44 @@
 #include "Mesh/ConVexHull.h"
 #include "ReadMesh.h"
 #include "CamPart/Joint.h"
+#include <unsupported/Eigen/NonLinearOptimization>
 
 ReadCurve::ReadCurve()
 {
     pNum = 0;
     TranM.setIdentity();
 }
+
+/*void ReadCurve::once()
+{
+    //fstream fileC;
+    //fileC.open("../data/trex.obj", ios::in);
+    MatrixXd V;
+    MatrixXi T;
+    igl::readOBJ("../data/bird.obj", V, T);
+    vector<Vector3d> pc;
+    int N = V.rows();
+    int k = 40;
+    while(N%k != 0)
+        k++;
+    for(int i=0; k*i < N; i++)
+    {
+        Vector3d pt(0,0,0);
+        for(int j=0;j<k;j++)
+            pt += V.row(k*i+j).transpose();
+        pt /= k;
+        pc.push_back(pt);
+    }
+
+    cout<< k <<" " << pc.size()<<endl;
+    fstream fileC;
+    fileC.open("../data/bird.txt", ios::out);
+    fileC << pc.size() <<endl;
+    for(auto p : pc)
+        fileC << p.z() <<" " << p.x()<<endl;
+    fileC << 2 << endl << 0;
+    fileC.close();
+}*/
 
 void ReadCurve::readFile(string fname)
 {
@@ -36,7 +68,7 @@ void ReadCurve::readFile(string fname)
         posM(i,1) = y;
         posM(i,2) = 0;
     }
-    Smooth();
+
     int SurType;
     fileC >> SurType;
     if(SurType == 0)
@@ -49,9 +81,20 @@ void ReadCurve::readFile(string fname)
         surface_type = SurfaceType::TT;
     if(SurType == 4)
         surface_type = SurfaceType::RT;
+
+    int keyN;
+    fileC >> keyN;
+    keys.clear();
+    for(int i=0;i<keyN;i++)
+    {
+        double x, y;
+        fileC >> x >> y;
+        keys.emplace_back(x*2*M_PI, y*2*M_PI);
+    }
     fileC.close();
     std::cout<< "finish read" <<endl;
-
+    if(keys.size() >= 1)
+        Smooth();
     getMinMax();
     placeCen();
     scaleTo(70);
@@ -120,11 +163,64 @@ void ReadCurve::CreateCamFollower()
             _bsF->ValuePoints.emplace_back(folAlphas[i], folBetas[i]);
         _bsF->ValueToControl();
 
+        int optN = 40;
+        vector<double> fx(optN);
+        for(int i=0;i<optN;i++) {
+            fx[i] = (i + 1) * 2.0 * M_PI / (optN + 1);
+            //fx[i] = M_PI*sin((fx[i]-M_PI)/2) + M_PI;
+        }
+        sf = new SplineFunc(fx);
+
+        LMFunctor functorOpt;
+        functorOpt.n = optN;
+        functorOpt.m = pNum+1;
+        functorOpt.folCen = folCen;
+        functorOpt.folJoint<< -40, 0, 0;
+        functorOpt.bsf = _bsF;
+        functorOpt.sf = sf;
+        functorOpt.Key.clear();
+        functorOpt.Key = keys;
+        functorOpt.keys = functorOpt.Key.size();
+
+        Eigen::LevenbergMarquardt<LMFunctor, double> lmOpt(functorOpt);
+        VectorXd preX;
+        preX.resize(optN);
+        for(int i=0;i<optN;i++)
+            preX[i] = fx[i];
+        vector<double> kp = functorOpt.GetKepa(preX);
+        double maxk = *max_element(kp.begin(), kp.end());
+        //cout<<maxk << " ";
+        cout<< "optimizing " << endl;
+        lmOpt.minimize(preX);
+        kp = functorOpt.GetKepa(preX);
+        maxk = *max_element(kp.begin(), kp.end());
+        //cout<<maxk << " ";
+
+        double minR;
+        if(maxk >= 1)
+            minR = 15/(log(maxk)+1);
+        else
+            minR = 15/maxk;
+        cout<< minR <<endl;
+        double L = -80/(sqrt(minR/15) + 1);
+        sf->SameSpline(preX);
+
+
+        for(int i=0;i<pNum;i++)
+        {
+            double t = i*2*M_PI/pNum;
+            double s = sf->GetFx(t)/2/M_PI;
+            Vector2d tmp = _bsF->SplinePoint(s);
+
+            folAlphas[i] = tmp.x();
+            folBetas[i] = tmp.y();
+        }
+
         cam2R = new Cam2R();
         cam2R->folCen = folCen;
         cam2R->folAxisAlpha<< 0, 1, 0;
         cam2R->folAxisBeta << 0, 0, 1;
-        cam2R->pJoint_0<< -40, 0, 0;
+        cam2R->pJoint_0<< L, 0, 0;
         cam2R->pAnkle_0<< -60, 0, 0;
         cam2R->folAlpha = folAlphas;
         cam2R->folBeta = folBetas;

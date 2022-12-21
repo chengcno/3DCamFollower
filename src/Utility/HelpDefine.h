@@ -58,7 +58,7 @@
 #define M_PI			3.1415926535897932384626433832795
 #endif
 
-#define CSG_NUM_M       80
+#define CSG_NUM_M       40
 #define CSG_NUM_N       12
 
 #define FAB_SCALE       0.84

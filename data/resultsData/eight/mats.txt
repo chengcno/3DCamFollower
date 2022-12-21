@@ -1,0 +1,19 @@
+###################################################
+# Part model
+
+Model 7
+Model/mech_4_part_00.obj
+Model/mech_4_part_01.obj
+Model/mech_4_part_00_s0.obj
+Model/mech_4_part_00_s1.obj
+Model/mech_4_part_01_s0.obj
+Model/mech_4_part_01_s1.obj
+Model/mech_4_targetcurve.obj
+
+###################################################
+# Part motion
+
+Matrix 2
+Frame 120
+Motion/mech_4_part_00.pmt
+Motion/mech_4_part_01.pmt

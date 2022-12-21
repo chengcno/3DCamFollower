@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////
 //Cam.cpp
 //
-// Create model of Cam (with handle)
+// Create model of Cam
 //
 // Created by Yingjie Cheng on 2020/11/15.
 //

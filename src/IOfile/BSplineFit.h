@@ -1,5 +1,6 @@
 //
-// Created by zz on 2020/12/25.
+// Created by Yingjie CHNEG
+// 20/Dec/2020
 //
 
 #ifndef POLYLINEPARSER_BSPLINEFIT_H

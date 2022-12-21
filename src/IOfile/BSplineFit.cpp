@@ -1,5 +1,6 @@
 //
-// Created by zz on 2020/12/25.
+// Created by Yingjie CHNEG
+// 20/Dec/2020
 //
 
 #include "BSplineFit.h"
@@ -8,8 +9,7 @@
 
 BSplineFit::BSplineFit()
 {
-    scale_s = 0.35;
-    // pigeon is 0.4
+    scale_s = 1;
 }
 
 BSplineFit::BSplineFit(vector<Vector2d> _CtrPoints)

@@ -1,5 +1,6 @@
 //
-// Created by zz on 2020/12/27.
+// Created by Yingjie CHNEG
+// 20/Dec/2020
 //
 
 #ifndef CAMMECHCREATOR_SPLINEFUNC_H
@@ -21,6 +22,7 @@ public:
     vector<double> m;
 
     MatrixXd M_Y;
+    SparseLU<SparseMatrix<double>> solverTriM;
 
 public:
     SplineFunc(vector<double> _fx);
@@ -40,7 +42,8 @@ public:
 
 public:
     void ComputeCubicSpline();
-    bool SameSpline(const double *S);
+    void DecompressMatrix();
+    bool SameSpline(const VectorXd &x);
 
 private:
     void GetIdrel(int &id, double &rel, double t);

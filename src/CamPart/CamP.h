@@ -1,5 +1,6 @@
 //
-// Created by temp on 30/12/21.
+// Created by Yingjie CHNEG
+// 20/Dec/2020
 //
 
 #ifndef SPATIALLINKAGES_CAMP_H

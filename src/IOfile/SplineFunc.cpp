@@ -1,5 +1,6 @@
 //
-// Created by zz on 2020/12/27.
+// Created by Yingjie CHNEG
+// 20/Dec/2020
 //
 
 #include "SplineFunc.h"
@@ -20,6 +21,7 @@ SplineFunc::SplineFunc(vector<double> _fx)
     nSize = _fx.size() + 1;
     theta = 2.0*M_PI/nSize;
 
+    DecompressMatrix();
     ComputeCubicSpline();
 }
 
@@ -36,6 +38,7 @@ SplineFunc::SplineFunc(const double *S, int size_s)
     }
     Ff.push_back(2*M_PI);
 
+    DecompressMatrix();
     ComputeCubicSpline();
 }
 
@@ -58,7 +61,7 @@ double SplineFunc::GetFx(double t)
 {
     int id = floor(t/theta);
     double rel = (t - id*theta);
-    if(id == nSize) {id = 0;}
+    if(id == nSize) id = 0;
     if(id > nSize || id < 0)
     {
         printf("s=s(t) value t is wrong!\n");
@@ -106,7 +109,8 @@ double SplineFunc::GetDDDFx(double t)
     return D3SplineY;
 }
 
-void SplineFunc::ComputeCubicSpline() {
+void SplineFunc::DecompressMatrix()
+{
     SparseMatrix<double> triM(nSize + 1, nSize + 1);
     triM.reserve(3 * nSize + 3);
 
@@ -127,23 +131,48 @@ void SplineFunc::ComputeCubicSpline() {
 
     triM.makeCompressed();
 
-    //cout<<triM<<endl;
-    //cout<<triM.
+    solverTriM.compute(triM);
+}
 
-    clock_t st,et;
+void SplineFunc::ComputeCubicSpline() {
+    /*
+    SparseMatrix<double> triM(nSize + 1, nSize + 1);
+    triM.reserve(3 * nSize + 3);
+
+    triM.coeffRef(0, 0) = 2;
+    triM.coeffRef(0, 1) = 1;
+    triM.coeffRef(0, nSize - 1) = 1;
+    triM.coeffRef(0, nSize) = 2;
+    for (int i = 1; i < nSize; i++) {
+        int bef, nex;
+        bef = i - 1;
+        nex = i + 1;
+        triM.coeffRef(i, bef) = 1;
+        triM.coeffRef(i, i) = 4;
+        triM.coeffRef(i, nex) = 1;
+    }
+    triM.coeffRef(nSize, 0) = 1;
+    triM.coeffRef(nSize, nSize) = -1;
+
+    triM.makeCompressed();
+*/
+    /*
+    //clock_t st,et;
     //cout<<"start LU "<<endl;
-    st = clock();
+    //st = clock();
     //chrono::steady_clock::time_point time_start=chrono::steady_clock::now();
-    SparseLU<SparseMatrix<double>> solverTriM(triM);
-    et = clock();
+    //SparseLU<SparseMatrix<double>> solverTriM(triM);
+    //et = clock();
     //chrono::steady_clock::time_point time_end=chrono::steady_clock::now();
     //chrono::duration<double> time_used=chrono::duration_cast<chrono::duration<double>>(time_end-time_start);
     //cout<<"finish LU "<<"duration= "<<1000*(et -st)/(double)CLOCKS_PER_SEC<<endl;
     //SimplicialCholesky<SparseMatrix<double>> solverTriM(triM);
-    //solverTriM.
 
     //cout<<"start inverse"<<endl;
     //st = clock();
+     */
+    ///inverse matrix for gradient
+    /*
     SparseMatrix<double> I(nSize+1,nSize+1);
     I.setIdentity();
     MatrixXd M_inv = solverTriM.solve(I);
@@ -166,45 +195,39 @@ void SplineFunc::ComputeCubicSpline() {
     Ym = Ym*6/pow(theta,2);
     Ym.makeCompressed();
     M_Y = M_inv*Ym;
-
+*/
     //cout<<triM<<endl;
     //cout<<M_inv<<endl;
     //cout<<Ym<<endl;
     //cout<<M_Y<<endl;
 
-    ///
-    //vector<double> Vx,Vy,Vz;
     VectorXd Vy;
     Vy.resize(nSize + 1);
-
     Vy(0) = ((Ff[1] - Ff[0]) - (Ff[nSize] - Ff[nSize - 1])) * 6 / pow(theta, 2);
-    //Vz.push_back(ValuePoints[nValue-1].z()*6);
+
     for (int i = 1; i < nSize; i++) {
         Vy(i) = (Ff[i + 1] + Ff[i - 1] - 2 * Ff[i]) * 6 / pow(theta, 2);
-        //Vz.push_back(ValuePoints[i].z()*6);
     }
     Vy(nSize) = 0;
 
-    //cout<<Vy<<endl;
-
-    ///
     VectorXd Res;
     Res = solverTriM.solve(Vy);
 
-    m.clear();
-    a.clear();
-    b.clear();
-    c.clear();
-    d.clear();
+    m.resize(nSize+1);
+    a.resize(nSize);
+    b.resize(nSize);
+    c.resize(nSize);
+    d.resize(nSize);
     for (int i = 0; i <= nSize; i++) {
-        m.push_back(Res(i));
+        m[i] = Res(i);
     }
     for (int i = 0; i < nSize; i++) {
-        a.push_back(Ff[i]);
-        b.push_back((Ff[i + 1] - Ff[i]) / theta - theta * m[i] / 2 - (m[i + 1] - m[i]) * theta / 6);
-        c.push_back(m[i] / 2);
-        d.push_back((m[i + 1] - m[i]) / 6 / theta);
+        a[i] = Ff[i];
+        b[i] = (Ff[i + 1] - Ff[i]) / theta - theta * m[i] / 2 - (m[i + 1] - m[i]) * theta / 6;
+        c[i] = m[i] / 2;
+        d[i] = (m[i + 1] - m[i]) / 6 / theta;
     }
+
     //printf("finish solve s=s(t) spline\n");
     //cout<<"res =\n"<<Res<<endl;
     //cout<<theta<<endl;
@@ -294,19 +317,25 @@ vector<double> SplineFunc::partDDDFx(double t)
 }
 
 
-bool SplineFunc::SameSpline(const double *S)
+bool SplineFunc::SameSpline(const VectorXd &x)
 {
     bool is_same = true;
 
     for(int i=0;i<nSize-1;i++)
     {
-        if(abs(S[i] - fx[i]) > 0.000001)
+        if(abs(x[i] - Ff[i-1]) > 0.0000001)
         {
             is_same = false;
-            cout<<"update s(t)"<<endl;
+            //cout<<"update s(t)"<<endl;
             break;
-
         }
+    }
+
+    if(!is_same)
+    {
+        for(int i=1;i<nSize;i++)
+            Ff[i] = x[i-1];
+        ComputeCubicSpline();
     }
 
     return is_same;

@@ -15,6 +15,8 @@
 #include "Utility/HelpTypedef.h"
 #include "CamPart/Cam2R.h"
 #include "CamPart/CamC.h"
+#include "SplineFunc.h"
+#include "Opt/LMopt.h"
 
 using namespace std;
 using namespace Eigen;
@@ -30,6 +32,7 @@ public:
 public:
     int pNum;
     MatrixXd posM;
+    vector<pair<double, double>> keys;
 
     Vector3d box_min, box_max;
     Matrix4d TranM;
@@ -83,6 +86,9 @@ private:
 
     BSplineFit* _bsF;
     double radiusR;
+
+    SplineFunc *sf;
+
 };
 
 

@@ -1,5 +1,6 @@
 //
-// Created by temp on 3/1/22.
+// Created by Yingjie CHNEG
+// 20/Dec/2020
 //
 
 #ifndef SPATIALLINKAGES_CUBICSPLINE_H
