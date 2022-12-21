@@ -3,7 +3,7 @@
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
-![](https://github.com/chengcno/SpatialLinkageCam/blob/main/doc/teaser.png)
+![](https://github.com/chengcno/3DCamFollower/blob/main/doc/table.png)
 
 This repo is an implementation of [Spatial-Temporal Motion Control via Composite Cam-follower Mechanisms](https://sutd-cgl.github.io/supp/Publication/projects/2021-SIGAsia-3DCamMech/index.html) [Cheng et al. 2021].
 If you have any problems when using this code, you can contact me any time through chengyj@mail.ustc.edu.cn
@@ -55,7 +55,7 @@ This should find and build the dependencies and create a `3DCams_Main` binary.
 ## GUI Interface <a name = "usage"></a>
 The control panel is shown below. There are 3 components in the control panel: 
 **Operation Control**, **Motion Control**, **Render Control**.
-![](https://github.com/chengcno/SpatialLinkageCam/blob/main/doc/UI.png)
+![](https://github.com/chengcno/3DCamFollower/blob/main/doc/UI.png)
 
 - ### Operation Control
 
@@ -79,20 +79,20 @@ These instructions give an example to you of how to use our code to generate a c
 
 ### Step 1: import an input curve
 Import any input curve file by clicking `Read Input Curve` button.
-![](https://github.com/chengcno/SpatialLinkageCam/blob/main/doc/inputCurve.png)
+![](https://github.com/chengcno/3DCamFollower/blob/main/doc/inputCurve.png)
 
 ### Step 2: optimize a mechanism 
 Click the `Optimization` button. It would cost about ~10sec.
-![](https://github.com/chengcno/SpatialLinkageCam/blob/main/doc/optModel.png)
+![](https://github.com/chengcno/3DCamFollower/blob/main/doc/optModel.png)
 
 ### Step 3: control the movement
 Use `Restart Motion`,`Stop Motion`,`Motion Speed` to control the movement. Use mouse to adjust the camera view.
-![](https://github.com/chengcno/SpatialLinkageCam/blob/main/doc/motion.png)
+![](https://github.com/chengcno/3DCamFollower/blob/main/doc/motion.png)
 
 ### Step 4: Show results demo
 Import one results demo from file `data/resultsData/ * /mats.txt` by clicking `Read CamFollower` button.
 Here is a view of drawing cats.
-![](https://github.com/chengcno/SpatialLinkageCam/blob/main/doc/motion.png)
+![](https://github.com/chengcno/3DCamFollower/blob/main/doc/cats.png)
 
 
 ## Acknowledgements <a name = "acknowledgement"></a>
